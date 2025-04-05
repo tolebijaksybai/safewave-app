@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Download Countries JSON</title>
+</head>
+<body>
+<button onclick="downloadCountries()">Скачать страны</button>
+<button onclick="downloadCities()">Скачать города</button>
+
+<script>
+    async function downloadAndSave(url, filename, transformFn) {
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            const simplified = transformFn(data);
+
+            const blob = new Blob([JSON.stringify(simplified, null, 2)], {
+                type: "application/json",
+            });
+
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        } catch (e) {
+            console.error("Ошибка загрузки:", e);
+        }
+    }
+
+    function downloadCountries() {
+        downloadAndSave(
+            "https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/json/countries.json",
+            "countries.json",
+            (data) => data.map(c => ({ name: c.name, iso2: c.iso2 }))
+        );
+    }
+
+    function downloadCities() {
+        downloadAndSave(
+            "https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/json/cities.json",
+            "cities.json",
+            (data) => data.map(c => ({ name: c.name, country_code: c.country_code }))
+        );
+    }
+</script>
+</body>
+</html>

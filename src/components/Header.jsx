@@ -14,15 +14,16 @@ import {Skeleton} from "@/components/ui/skeleton"
 const navItems = [
     {to: "/", label: "Home"},
     {to: "/categories", label: "Categories"},
-    {to: "/map", label: "Map"},
+    {to: "/maps", label: "Map"},
     {href: "/#information", label: "Information"},
-    {to: "/help", label: "Help"}
+    {to: "/help", label: "Contacts"},
+    {to: "/quizzes", label: "Quiz"},
 ]
 
 export default function Header() {
     const {user, logout, loading} = useAuth()
     const userInitial = user?.email?.[0]?.toUpperCase() ?? "U"
-    const avatarSrc = user?.photo ? `/uploads/${user.photo}` : undefined
+    const avatarSrc = user?.photo_url ? user.photo_url : undefined
 
     return (
         <header className="bg-white border-b shadow-sm h-[70px]">
@@ -71,7 +72,7 @@ export default function Header() {
                                 <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 hover:bg-zinc-200 rounded-lg cursor-pointer">
                                     <Avatar className="h-8 w-8 bg-zinc-800">
                                         {avatarSrc ? (
-                                            <AvatarImage src={avatarSrc} alt={user.email} />
+                                            <AvatarImage src={avatarSrc} alt={user.email}  className="object-cover"/>
                                         ) : null}
                                         <AvatarFallback className="text-white bg-zinc-800">
                                             {userInitial}
@@ -91,6 +92,9 @@ export default function Header() {
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
                                     <Link to="/change-password">Change Password</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
+                                    <Link to="/statistics">Statistics</Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={logout} className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
                                     Logout

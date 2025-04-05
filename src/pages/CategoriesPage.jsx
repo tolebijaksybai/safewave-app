@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import axios from "@/lib/axios"
+import { useNavigate } from "react-router-dom"
 
 export default function CategoriesPage() {
     const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get("/api/categories")
@@ -16,6 +18,10 @@ export default function CategoriesPage() {
             .finally(() => setLoading(false))
     }, [])
 
+    const handleClick = (categoryId) => {
+        navigate(`/categories/${categoryId}/waters`)
+    }
+
     return (
         <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-100 to-blue-200 py-12 px-4">
             <h2 className="text-center text-3xl font-bold text-zinc-900 mb-10">CATEGORIES</h2>
@@ -26,7 +32,8 @@ export default function CategoriesPage() {
                     {categories.map(category => (
                         <div
                             key={category.id}
-                            className="bg-blue-800 text-white text-center rounded-xl p-6 font-semibold text-lg hover:bg-blue-900 transition"
+                            onClick={() => handleClick(category.id)}
+                            className="bg-blue-800 text-white text-center rounded-xl p-6 font-semibold text-lg hover:bg-blue-900 transition cursor-pointer"
                         >
                             {category.name}
                         </div>

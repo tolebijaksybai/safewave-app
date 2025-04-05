@@ -1,4 +1,3 @@
-// import LoginCard from "@/components/LoginCard.jsx";
 import {useEffect} from "react";
 
 export default function HomePage() {
@@ -7,7 +6,7 @@ export default function HomePage() {
         if (hash) {
             const element = document.querySelector(hash)
             if (element) {
-                element.scrollIntoView({ behavior: "smooth" })
+                element.scrollIntoView({behavior: "smooth"})
             }
         }
     }, [])
@@ -85,46 +84,40 @@ export default function HomePage() {
                 <div className="grid grid-cols-4 gap-4">
                     {/* Первая строка */}
                     <img
-                        src="/images/water-1.png"
+                        src="/images/waters/water-1.png"
                         alt="Water 1"
                         className="w-full h-48 object-cover rounded-lg col-span-2"
                     />
                     <img
-                        src="/images/water-2.png"
+                        src="/images/waters/water-2.png"
                         alt="Water 2"
                         className="w-full h-48 object-cover rounded-lg"
                     />
                     <img
-                        src="/images/water-3.png"
+                        src="/images/waters/water-3.png"
                         alt="Water 3"
                         className="w-full h-48 object-cover rounded-lg"
                     />
 
                     {/* Вторая строка */}
                     <img
-                        src="/images/water-4.png"
+                        src="/images/waters/water-4.png"
                         alt="Water 4"
                         className="w-full h-48 object-cover rounded-lg"
                     />
                     <img
-                        src="/images/water-5.png"
+                        src="/images/waters/water-5.png"
                         alt="Water 5"
                         className="w-full h-48 object-cover rounded-lg"
                     />
                     <img
-                        src="/images/water-6.png"
+                        src="/images/waters/water-6.png"
                         alt="Water 6"
                         className="w-full h-48 object-cover rounded-lg col-span-2"
                     />
                 </div>
 
             </div>
-
-            {/*<footer className="bg-gradient-to-r from-sky-200 to-indigo-300 py-28 px-4">*/}
-            {/*    <div className="max-w-lg mx-auto">*/}
-            {/*        <LoginCard/>*/}
-            {/*    </div>*/}
-            {/*</footer>*/}
         </>
     )
 }
