@@ -1,9 +1,13 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import axios from "@/lib/axios"
 import { Button } from "@/components/ui/button"
+import { useTranslation } from "react-i18next"
 
 export default function QuizPlayerPage() {
+    const { t } = useTranslation()
     const { quizId } = useParams()
     const navigate = useNavigate()
     const [quiz, setQuiz] = useState(null)
@@ -37,7 +41,7 @@ export default function QuizPlayerPage() {
             setIsCorrect(null)
             setShowAnswer(false)
         } else {
-            navigate("/quizzes/" + quizId + "/prize")
+            navigate(`/quizzes/${quizId}/prize`)
         }
     }
 
@@ -50,7 +54,7 @@ export default function QuizPlayerPage() {
     }
 
     if (!quiz || !quiz.questions || !quiz.questions[currentQuestionIndex]) {
-        return <p className="text-center mt-10">Loading quiz...</p>
+        return <p className="text-center mt-10">{t("quiz_play.loading")}</p>
     }
 
     const currentQuestion = quiz.questions[currentQuestionIndex]
@@ -89,11 +93,13 @@ export default function QuizPlayerPage() {
                     <div className="text-right">
                         {restart ? (
                             <Button onClick={handleRestart} className="bg-red-600 hover:bg-red-700">
-                                Try Again
+                                {t("quiz_play.try_again")}
                             </Button>
                         ) : (
                             <Button onClick={handleNext} className="bg-orange-600 hover:bg-orange-700">
-                                {currentQuestionIndex + 1 === quiz.questions.length ? "Finish" : "Next Question"}
+                                {currentQuestionIndex + 1 === quiz.questions.length
+                                    ? t("quiz_play.finish")
+                                    : t("quiz_play.next")}
                             </Button>
                         )}
                     </div>

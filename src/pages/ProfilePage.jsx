@@ -8,9 +8,11 @@ import {useAuth} from "@/context/AuthContext"
 import {toast} from "sonner"
 import countriesData from "@/data/countries.json"
 import citiesData from "@/data/cities.json"
-import SelectCombobox from "@/components/SelectCombobox.jsx";
+import SelectCombobox from "@/components/SelectCombobox.jsx"
+import {useTranslation} from "react-i18next"
 
 export default function ProfilePage() {
+    const {t} = useTranslation()
     const {user, setUser} = useAuth()
     const [form, setForm] = useState({
         name: "",
@@ -88,14 +90,14 @@ export default function ProfilePage() {
                     "X-HTTP-Method-Override": "PUT"
                 }
             })
-            toast.success("Profile updated!")
+            toast.success(t("profile_updated"))
             if (data.user) {
                 setUser(data.user)
             }
             setEditing(false)
             // eslint-disable-next-line no-unused-vars
         } catch (error) {
-            toast.error("Failed to update profile")
+            toast.error(t("profile_update_failed"))
         }
     }
 
@@ -114,8 +116,7 @@ export default function ProfilePage() {
                             {photoPreview ? (
                                 <img src={photoPreview} alt="Avatar" className="h-16 w-16 rounded-full object-cover"/>
                             ) : (
-                                <div
-                                    className="h-16 w-16 rounded-full bg-zinc-800 flex items-center justify-center text-white font-bold text-lg">
+                                <div className="h-16 w-16 rounded-full bg-zinc-800 flex items-center justify-center text-white font-bold text-lg">
                                     {userInitial}
                                 </div>
                             )}
@@ -129,39 +130,38 @@ export default function ProfilePage() {
                             />
                         </div>
                         <div>
-                            <h3 className="text-xl font-semibold text-zinc-900">{form.name || "Your Name"}</h3>
+                            <h3 className="text-xl font-semibold text-zinc-900">{form.name || t("your_name")}</h3>
                             <p className="text-sm text-zinc-600">{form.email}</p>
                         </div>
                     </div>
-                    <Button onClick={() => setEditing(!editing)}>{editing ? "Cancel" : "Edit"}</Button>
+                    <Button onClick={() => setEditing(!editing)}>
+                        {editing ? t("cancel") : t("edit")}
+                    </Button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
                     <div>
-                        <Label>Full Name</Label>
-                        <Input id="name" className="bg-white" value={form.name} onChange={handleChange}
-                               disabled={!editing}/>
+                        <Label>{t("full_name")}</Label>
+                        <Input id="name" value={form.name} onChange={handleChange} disabled={!editing} className="bg-white"/>
                     </div>
                     <div>
-                        <Label>Nick Name</Label>
-                        <Input id="nickname" className="bg-white" value={form.nickname} onChange={handleChange}
-                               disabled={!editing}/>
+                        <Label>{t("nickname")}</Label>
+                        <Input id="nickname" value={form.nickname} onChange={handleChange} disabled={!editing} className="bg-white"/>
                     </div>
                     <div>
-                        <Label>Gender</Label>
-                        <Select value={form.gender} onValueChange={(val) => handleSelect("gender", val)}
-                                disabled={!editing}>
+                        <Label>{t("gender")}</Label>
+                        <Select value={form.gender} onValueChange={val => handleSelect("gender", val)} disabled={!editing}>
                             <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select gender"/>
+                                <SelectValue placeholder={t("select_gender")}/>
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="male">Male</SelectItem>
-                                <SelectItem value="female">Female</SelectItem>
+                                <SelectItem value="male">{t("male")}</SelectItem>
+                                <SelectItem value="female">{t("female")}</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                     <div>
-                        <Label>Country</Label>
+                        <Label>{t("country")}</Label>
                         <SelectCombobox
                             items={countries}
                             value={form.country}
@@ -170,21 +170,20 @@ export default function ProfilePage() {
                         />
                     </div>
                     <div>
-                        <Label>Language</Label>
-                        <Select value={form.language} onValueChange={(val) => handleSelect("language", val)}
-                                disabled={!editing}>
+                        <Label>{t("language")}</Label>
+                        <Select value={form.language} onValueChange={(val) => handleSelect("language", val)} disabled={!editing}>
                             <SelectTrigger className="bg-white">
-                                <SelectValue placeholder="Select language"/>
+                                <SelectValue placeholder={t("select_language")}/>
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="english">English</SelectItem>
-                                <SelectItem value="kazakh">Kazakh</SelectItem>
-                                <SelectItem value="russian">Russian</SelectItem>
+                                <SelectItem value="english">{t("english")}</SelectItem>
+                                <SelectItem value="kazakh">{t("kazakh")}</SelectItem>
+                                <SelectItem value="russian">{t("russian")}</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                     <div>
-                        <Label>City</Label>
+                        <Label>{t("city")}</Label>
                         <SelectCombobox
                             items={cities}
                             value={form.city}
@@ -193,13 +192,12 @@ export default function ProfilePage() {
                         />
                     </div>
                     <div>
-                        <Label>Email</Label>
-                        <Input id="email" className="bg-white" value={form.email} onChange={handleChange}
-                               disabled={!editing}/>
+                        <Label>{t("email")}</Label>
+                        <Input id="email" value={form.email} onChange={handleChange} disabled={!editing} className="bg-white"/>
                     </div>
                     {editing && (
                         <div className="md:col-span-2 text-right">
-                            <Button onClick={handleSubmit}>Save Changes</Button>
+                            <Button onClick={handleSubmit}>{t("save_changes")}</Button>
                         </div>
                     )}
                 </div>

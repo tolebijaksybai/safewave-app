@@ -17,14 +17,16 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import {cn} from "@/lib/utils"
+import {useTranslation} from "react-i18next"
 
 export default function SelectWaterCombobox({
                                                 items = [],
                                                 value,
                                                 onChange,
-                                                placeholder = "Select water",
+                                                placeholder = "select_water",
                                                 disabled = false,
                                             }) {
+    const {t} = useTranslation()
     const [open, setOpen] = useState(false)
 
     const selectedItem = items.find((item) => String(item.id) === String(value))
@@ -39,15 +41,15 @@ export default function SelectWaterCombobox({
                     aria-expanded={open}
                     className="w-full justify-between"
                 >
-                    {selectedItem?.name || placeholder}
+                    {selectedItem?.name || t(placeholder)}
                     <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50"/>
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[--radix-popover-trigger-width] max-w-full p-0">
                 <Command>
-                    <CommandInput placeholder="Search water..." className="h-9"/>
+                    <CommandInput placeholder={t("search_water")} className="h-9"/>
                     <CommandList>
-                        <CommandEmpty>No water found.</CommandEmpty>
+                        <CommandEmpty>{t("no_water_found")}</CommandEmpty>
                         <CommandGroup>
                             {items.map((item) => (
                                 <CommandItem

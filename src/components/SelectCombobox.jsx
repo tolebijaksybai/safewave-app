@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import {useState} from "react"
+import {Check, ChevronsUpDown} from "lucide-react"
+import {Button} from "@/components/ui/button"
 import {
     Command,
     CommandEmpty,
@@ -16,15 +16,17 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+import {cn} from "@/lib/utils"
+import {useTranslation} from "react-i18next"
 
 export default function SelectCombobox({
                                            items,
                                            value,
                                            onChange,
-                                           placeholder = "Select item",
+                                           placeholder = "select_item",
                                            disabled = false
                                        }) {
+    const {t} = useTranslation()
     const [open, setOpen] = useState(false)
 
     return (
@@ -37,15 +39,15 @@ export default function SelectCombobox({
                     aria-expanded={open}
                     className="w-full justify-between"
                 >
-                    {value || placeholder}
+                    {value || t(placeholder)}
                     <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[--radix-popover-trigger-width] max-w-full p-0">
                 <Command>
-                    <CommandInput placeholder="Search..." className="h-9" />
+                    <CommandInput placeholder={t("search")} className="h-9" />
                     <CommandList>
-                        <CommandEmpty>No item found.</CommandEmpty>
+                        <CommandEmpty>{t("no_item_found")}</CommandEmpty>
                         <CommandGroup>
                             {items.map((item) => (
                                 <CommandItem

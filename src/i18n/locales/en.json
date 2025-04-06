@@ -1,0 +1,198 @@
+{
+    "home": "Home",
+    "categories": "Categories",
+    "map": "Map",
+    "information": "Information",
+    "contacts": "Contacts",
+    "quiz": "Quiz",
+    "login": "Log in",
+    "logout": "Logout",
+    "my_profile": "My Profile",
+    "change_password": "Change Password",
+    "statistics": "Statistics",
+
+    "hero_quote": "Water is the source of life, but only conscious caution makes it safe.",
+    "safewave_title": "SAFEWAVE",
+    "main_title": "RULES FOR SAFE BEHAVIOR ON THE WATER",
+    "section_rules_title": "RULES FOR SAFE BEHAVIOR ON THE WATER",
+    "section_rules_text": "During the summer heat and vacation period, every city dweller seeks to escape into nature for a swim in a suitable body of water. However, what starts as a simple swim can often end in tragedy. The main cause of accidents on the water is the lack of safety awareness among the population and ignorance of the basic rules of water behavior. Knowing these rules and being able to provide first aid to a victim is essential for every vacationer.",
+    "swimming_rules_title": "RULES FOR SAFE SWIMMING",
+    "swimming_rule_1": "✔️ Only swim in designated areas like beaches, pools, and bathing areas.",
+    "swimming_rule_2": "✔️ Don’t enter the water under the influence of alcohol or drugs.",
+    "swimming_rule_3": "✔️ Let your body adjust gradually to water temperature.",
+    "swimming_rule_4": "✔️ Don’t jump from boats or high piers. Lung vessels could shrink on impact.",
+    "swimming_rule_5": "✔️ Never dive in unfamiliar waters or near rocks.",
+    "swimming_rule_6": "✔️ Don’t swim in rough waters or stormy weather.",
+    "first_aid_title": "FIRST AID RULES FOR WATER INCIDENTS",
+    "first_aid_1": "✔️ Call for help immediately.",
+    "first_aid_2": "✔️ Remove the victim from the water safely.",
+    "first_aid_3": "✔️ If unconscious – start artificial respiration.",
+    "first_aid_4": "✔️ Keep the person warm and dry.",
+
+    "categories_title": "Categories",
+    "loading": "Loading...",
+
+    "switch_to_edit": "Switch to Edit",
+    "switch_to_view": "Switch to View",
+    "add_point": "Add Point",
+    "cancel_add": "Cancel Add",
+    "edit_point": "Edit Point",
+    "water": "Water",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "save": "Save",
+    "point_saved": "Point saved",
+    "point_updated": "Point updated",
+    "point_deleted": "Point deleted",
+    "error_saving_point": "Error saving point",
+    "address": "Address",
+
+    "phone_label": "Multi-channel phone",
+    "email_label": "Email",
+    "address_label": "Address",
+    "work_schedule_label": "Work schedule",
+    "work_schedule": "Mon–Sun 10.00 pm–19.00 pm",
+    "contact_us": "Contact us",
+    "call": "Call",
+    "email": "Email",
+
+    "full_name": "Full Name",
+    "nickname": "Nick Name",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "country": "Country",
+    "language": "Language",
+    "english": "English",
+    "kazakh": "Kazakh",
+    "russian": "Russian",
+    "city": "City",
+    "select_gender": "Select gender",
+    "select_language": "Select language",
+    "edit": "Edit",
+    "save_changes": "Save Changes",
+
+    "select_item": "Select item",
+    "search": "Search...",
+    "no_item_found": "No item found.",
+    "select_water": "Select water",
+    "search_water": "Search water...",
+    "no_water_found": "No water found.",
+
+    "change_password_title": "Change the password",
+    "old_password": "Old password",
+    "new_password": "New password",
+    "new_password_repeat": "Repeat the new password",
+    "save_password": "Save password",
+    "saving": "Saving...",
+    "change_password_success": "Password changed successfully!",
+    "change_password_error": "Failed to change password",
+
+    "season_stats": {
+        "title": "Statistics of the bathing season in Kazakhstan",
+        "description_1": "In 2023, 612 permitted places of mass recreation, tourism and sports on water bodies were identified in the country. Additionally, it is planned to create 105 permitted bathing areas. In total, there are more than 50 thousand reservoirs in Kazakhstan used by citizens for swimming and recreation.",
+        "description_2": "To increase the safety of citizens, the Ministry of Emergency Situations (MOE) of Kazakhstan continues to work to increase the number of permitted bathing areas and strengthen preventive measures. Citizens are advised to swim only in specially equipped and authorized places, follow the rules of behavior on the water and follow the warnings of rescue services.",
+        "chart": {
+            "approved_places": "Approved places (2023)",
+            "planned_places": "Planned places",
+            "total_water": "Total water bodies",
+            "monitored_sites": "Monitored sites"
+        },
+        "count": "places"
+    },
+
+    "waters_by_category": {
+        "back": "← Back",
+        "loading_category": "Loading...",
+        "loading_waters": "Loading waters...",
+        "details": "Details",
+        "the": "The"
+    },
+
+    "water_detail": {
+        "loading": "Loading...",
+        "not_found": "Water not found",
+        "back": "← Back"
+    },
+
+    "auth_login": {
+        "title": "Log in to your account",
+        "email": "Email",
+        "email_placeholder": "Enter your email",
+        "password": "Password",
+        "password_placeholder": "Enter your password",
+        "button": "Login",
+        "logging_in": "Logging in...",
+        "success": "Logged in successfully!",
+        "failed": "Login failed. Please check your credentials.",
+        "google": "Continue with Google",
+        "no_account": "Don’t have an account?",
+        "signup": "Sign up",
+        "motto_part1": "Water safety is",
+        "motto_emphasis1": "not an option",
+        "motto_part2": "it's a",
+        "motto_emphasis2": "necessity."
+    },
+
+    "auth_callback": {
+        "logging_in": "Logging in...",
+        "success": "Logged in with Google!",
+        "error": "Google login failed!"
+    },
+
+    "register": {
+        "title": "Create an account",
+        "email": "Email",
+        "password": "Password",
+        "confirm_password": "Confirm Password",
+        "placeholder_email": "Enter your email",
+        "placeholder_password": "Enter your password",
+        "placeholder_confirm_password": "Confirm your password",
+        "create_button": "Create account",
+        "creating": "Creating...",
+        "google": "Continue with Google",
+        "already": "Already have an account?",
+        "login_link": "Log in",
+        "success": "Account created successfully!",
+        "error": "Something went wrong. Please try again.",
+        "quote": "Water safety is <1>not an option</1>, it's a <3>necessity</3>."
+    },
+
+    "quiz_page": {
+        "loading": "Loading quizzes...",
+        "title": "Choose a Quiz",
+        "default_title": "Take the quiz and get a prize",
+        "default_description": "Answer a few questions to win a prize!",
+        "start": "Start to Play"
+    },
+
+    "quiz_play": {
+        "loading": "Loading quiz...",
+        "try_again": "Try Again",
+        "next": "Next Question",
+        "finish": "Finish"
+    },
+
+    "quiz_prize": {
+        "congrats": "WOW! YOU PASSED THE QUIZ!",
+        "choose_gift": "YOU CAN CHOOSE ANY GIFT FOR YOURSELF!",
+        "fins": "FINS FOR SWIMMING",
+        "vest": "SWIMMING VEST",
+        "hat": "SWIMMING HAT",
+        "goggles": "SWIMMING GOGGLES",
+        "attention": "Attention! To receive the prize, please contact us!",
+        "call": "Call",
+        "prepare": "To receive the prize, prepare the following information:",
+        "name": "Your name",
+        "phone": "Contact number",
+        "time": "Convenient time for communication",
+        "waiting": "We are waiting for your call! 🎉"
+    },
+
+    "auth": {
+        "logout_success": "You have been logged out successfully.",
+        "logout_error": "Error occurred during logout."
+    }
+
+
+}

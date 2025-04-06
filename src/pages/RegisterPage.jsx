@@ -1,16 +1,18 @@
-// File: src/pages/RegisterPage.jsx
+"use client"
+
 import { useState } from "react"
+import { useNavigate, Link } from "react-router-dom"
 import axios from "@/lib/axios"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Link } from "react-router-dom"
 import { FcGoogle } from "react-icons/fc"
 import { toast } from "sonner"
 import { useAuth } from "@/context/AuthContext"
-import { useNavigate } from "react-router-dom"
+import { useTranslation, Trans } from "react-i18next"
 
 export default function RegisterPage() {
+    const { t } = useTranslation()
     const { setToken } = useAuth()
     const [form, setForm] = useState({
         email: "",
@@ -18,12 +20,11 @@ export default function RegisterPage() {
         password_confirmation: ""
     })
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.id]: e.target.value })
     }
-
-    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -32,15 +33,14 @@ export default function RegisterPage() {
             const response = await axios.post("/api/register", form)
             const token = response.data.token
             setToken(token)
-            toast.success("Account created successfully!")
+            toast.success(t("register.success"))
             setForm({ email: "", password: "", password_confirmation: "" })
-
             navigate("/")
         } catch (error) {
             if (error.response?.data?.message) {
                 toast.error(error.response.data.message)
             } else {
-                toast.error("Something went wrong. Please try again.")
+                toast.error(t("register.error"))
             }
         } finally {
             setLoading(false)
@@ -56,7 +56,10 @@ export default function RegisterPage() {
             >
                 <div className="max-w-sm px-4 md:px-0">
                     <p className="text-2xl sm:text-3xl font-bold leading-snug">
-                        "Water safety is <span className='text-blue-500'>not an option</span>, it's a <span className='text-blue-500'>necessity.</span>"
+                        <Trans i18nKey="register.quote" components={{
+                            1: <span className="text-blue-500" />,
+                            3: <span className="text-blue-500" />
+                        }} />
                     </p>
                 </div>
             </div>
@@ -64,29 +67,70 @@ export default function RegisterPage() {
             {/* Right: registration form full width */}
             <div className="flex items-center justify-center p-6 bg-white relative">
                 <div className="w-full max-w-md space-y-6">
-                    <h2 className="text-2xl font-semibold text-center">Create an account</h2>
+                    <h2 className="text-2xl font-semibold text-center">
+                        {t("register.title")}
+                    </h2>
+
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" value={form.email} onChange={handleChange} placeholder="Enter your email" className="rounded-lg" required />
+                            <Label htmlFor="email">{t("register.email")}</Label>
+                            <Input
+                                id="email"
+                                value={form.email}
+                                onChange={handleChange}
+                                placeholder={t("register.placeholder_email")}
+                                className="rounded-lg"
+                                required
+                            />
                         </div>
+
                         <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" value={form.password} onChange={handleChange} placeholder="Enter your password" className="rounded-lg" required />
+                            <Label htmlFor="password">{t("register.password")}</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                value={form.password}
+                                onChange={handleChange}
+                                placeholder={t("register.placeholder_password")}
+                                className="rounded-lg"
+                                required
+                            />
                         </div>
+
                         <div className="space-y-2">
-                            <Label htmlFor="password_confirmation">Confirm Password</Label>
-                            <Input id="password_confirmation" type="password" value={form.password_confirmation} onChange={handleChange} placeholder="Confirm your password" className="rounded-lg" required />
+                            <Label htmlFor="password_confirmation">{t("register.confirm_password")}</Label>
+                            <Input
+                                id="password_confirmation"
+                                type="password"
+                                value={form.password_confirmation}
+                                onChange={handleChange}
+                                placeholder={t("register.placeholder_confirm_password")}
+                                className="rounded-lg"
+                                required
+                            />
                         </div>
-                        <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-                            {loading ? "Creating..." : "Create account"}
+
+                        <Button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+                        >
+                            {loading ? t("register.creating") : t("register.create_button")}
                         </Button>
                     </form>
-                    <Button variant="outline" className="w-full flex items-center justify-center gap-2 rounded-lg">
-                        <FcGoogle className="text-xl" /> Continue with Google
+
+                    <Button
+                        variant="outline"
+                        className="w-full flex items-center justify-center gap-2 rounded-lg"
+                    >
+                        <FcGoogle className="text-xl" /> {t("register.google")}
                     </Button>
+
                     <p className="text-sm text-center text-gray-600">
-                        Already Have An Account? <Link to="/login" className="text-blue-600 hover:underline">Log in</Link>
+                        {t("register.already")}{" "}
+                        <Link to="/login" className="text-blue-600 hover:underline">
+                            {t("register.login_link")}
+                        </Link>
                     </p>
                 </div>
             </div>

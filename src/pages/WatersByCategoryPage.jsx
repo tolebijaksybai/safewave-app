@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import axios from "@/lib/axios"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 export default function WatersByCategoryPage() {
+    const { t } = useTranslation()
     const { categoryId } = useParams()
+    const navigate = useNavigate()
+
     const [waters, setWaters] = useState([])
     const [categoryName, setCategoryName] = useState("")
     const [loading, setLoading] = useState(true)
-    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchWaters = async () => {
@@ -40,16 +42,16 @@ export default function WatersByCategoryPage() {
                         onClick={() => navigate(-1)}
                         className="flex items-center gap-2 text-zinc-700 border-zinc-300 hover:bg-zinc-100"
                     >
-                        ← Back
+                        {t("waters_by_category.back")}
                     </Button>
 
                     <h2 className="text-center text-3xl font-bold text-zinc-900 mb-10 uppercase">
-                        {categoryName ? `The ${categoryName}` : "Loading..."}
+                        {categoryName ? `${t("waters_by_category.the")} ${categoryName}` : t("waters_by_category.loading_category")}
                     </h2>
                 </div>
 
                 {loading ? (
-                    <p className="text-center text-zinc-500">Loading waters...</p>
+                    <p className="text-center text-zinc-500">{t("waters_by_category.loading_waters")}</p>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
                         {waters.map(water => (
@@ -76,7 +78,7 @@ export default function WatersByCategoryPage() {
                                         className="w-fit bg-blue-700 hover:bg-blue-800 text-white"
                                         onClick={() => navigate(`/waters/${water.id}`)}
                                     >
-                                        Details
+                                        {t("waters_by_category.details")}
                                     </Button>
                                 </div>
                             </div>

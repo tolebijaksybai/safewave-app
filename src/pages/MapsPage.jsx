@@ -1,6 +1,7 @@
 "use client"
 
 import {useEffect, useRef, useState, useCallback} from "react"
+import {useTranslation} from "react-i18next"
 import "ol/ol.css"
 import Map from "ol/Map"
 import View from "ol/View"
@@ -21,18 +22,17 @@ import SelectWaterCombobox from "@/components/SelectWaterCombobox"
 import {useAuth} from "@/context/AuthContext"
 
 export default function MapsPage() {
+    const {t} = useTranslation()
     const mapRef = useRef(null)
     const mapInstanceRef = useRef(null)
     const sourceRef = useRef(new VectorSource())
 
     const [mode, setMode] = useState("view")
     const [addingPoint, setAddingPoint] = useState(false)
-
     const [waters, setWaters] = useState([])
     const [selectedFeature, setSelectedFeature] = useState(null)
     const [editModalOpen, setEditModalOpen] = useState(false)
     const [editWaterId, setEditWaterId] = useState("")
-
     const [infoSidebarOpen, setInfoSidebarOpen] = useState(false)
     const [selectedWater, setSelectedWater] = useState(null)
 
@@ -104,9 +104,7 @@ export default function MapsPage() {
 
         map.on("click", (e) => {
             if (modeRef.current === "edit" && addingPointRef.current && !editModalOpen) {
-                const newFeature = new Feature({
-                    geometry: new Point(e.coordinate),
-                })
+                const newFeature = new Feature({geometry: new Point(e.coordinate)})
                 sourceRef.current.addFeature(newFeature)
                 setSelectedFeature(newFeature)
                 setEditModalOpen(true)
@@ -128,15 +126,13 @@ export default function MapsPage() {
         mapInstanceRef.current = map
     }, [])
 
-    // 🎯 Отдельный useEffect для select interaction (зависит от openInfoSidebar)
     useEffect(() => {
         if (!mapInstanceRef.current) return
         const map = mapInstanceRef.current
-
         const select = new Select({condition: click})
         map.addInteraction(select)
 
-        const handleSelect = (e) => {
+        select.on("select", (e) => {
             const feature = e.selected[0]
             if (!feature) return
 
@@ -147,13 +143,9 @@ export default function MapsPage() {
             } else {
                 openInfoSidebar(feature)
             }
-        }
+        })
 
-        select.on("select", handleSelect)
-
-        return () => {
-            map.removeInteraction(select)
-        }
+        return () => map.removeInteraction(select)
     }, [openInfoSidebar])
 
     const saveFeature = async () => {
@@ -169,15 +161,15 @@ export default function MapsPage() {
         try {
             if (selectedFeature.get("id")) {
                 await axios.put(`/api/map-points/${selectedFeature.get("id")}`, payload)
-                toast.success("Point updated")
+                toast.success(t("point_updated"))
             } else {
                 const {data} = await axios.post("/api/map-points", payload)
                 selectedFeature.set("id", data.id)
-                toast.success("Point saved")
+                toast.success(t("point_saved"))
             }
             selectedFeature.set("water_id", editWaterId)
         } catch (e) {
-            toast.error("Error saving point")
+            toast.error(t("error_saving_point"))
         }
 
         setEditModalOpen(false)
@@ -190,29 +182,28 @@ export default function MapsPage() {
         sourceRef.current.removeFeature(selectedFeature)
         setEditModalOpen(false)
         setSelectedFeature(null)
-        toast.success("Point deleted")
+        toast.success(t("point_deleted"))
     }
 
-    const isWaterUsed = (waterId) => {
-        return sourceRef.current.getFeatures().some(f =>
+    const isWaterUsed = (waterId) =>
+        sourceRef.current.getFeatures().some(f =>
             f.get("water_id")?.toString() === String(waterId) &&
             f !== selectedFeature
         )
-    }
 
     return (
         <div className="min-h-[calc(100vh-70px)] p-4 relative">
             {isAdmin && (
                 <div className="absolute top-7 left-14 z-10 flex gap-2">
                     <Button onClick={() => setMode(prev => prev === "view" ? "edit" : "view")}>
-                        {mode === "view" ? "Switch to Edit" : "Switch to View"}
+                        {mode === "view" ? t("switch_to_edit") : t("switch_to_view")}
                     </Button>
                     {mode === "edit" && (
                         <Button
                             variant={addingPoint ? "destructive" : "default"}
                             onClick={() => setAddingPoint(prev => !prev)}
                         >
-                            {addingPoint ? "Cancel Add" : "Add Point"}
+                            {addingPoint ? t("cancel_add") : t("add_point")}
                         </Button>
                     )}
                 </div>
@@ -221,14 +212,13 @@ export default function MapsPage() {
             <div ref={mapRef} className="w-full h-[88vh] rounded-lg border"/>
 
             {infoSidebarOpen && selectedWater && (
-                <div
-                    className="absolute top-5 right-5 z-20 h-[86vh] w-full max-w-md bg-white shadow-lg rounded-lg p-4 overflow-y-auto">
+                <div className="absolute top-5 right-5 z-20 h-[86vh] w-full max-w-md bg-white shadow-lg rounded-lg p-4 overflow-y-auto">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-lg font-semibold">{selectedWater.name}</h3>
                         <Button variant="ghost" onClick={() => setInfoSidebarOpen(false)}>✕</Button>
                     </div>
                     <div className="text-sm space-y-2">
-                        <p><strong>Address:</strong> {selectedWater.address}</p>
+                        <p><strong>{t("address")}:</strong> {selectedWater.address}</p>
                         {selectedWater.content && (
                             <div
                                 className="prose prose-sm max-w-none"
@@ -254,8 +244,8 @@ export default function MapsPage() {
             {editModalOpen && (
                 <div
                     className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded shadow max-w-sm w-full">
-                    <h3 className="text-lg font-semibold mb-2">Edit Point</h3>
-                    <label className="block text-sm mb-1">Water</label>
+                    <h3 className="text-lg font-semibold mb-2">{t("edit_point")}</h3>
+                    <label className="block text-sm mb-1">{t("water")}</label>
 
                     <SelectWaterCombobox
                         value={editWaterId}
@@ -271,11 +261,11 @@ export default function MapsPage() {
                         <Button variant="outline" onClick={() => {
                             setEditModalOpen(false)
                             setSelectedFeature(null)
-                        }}>Cancel</Button>
+                        }}>{t("cancel")}</Button>
                         {selectedFeature?.get("id") && (
-                            <Button variant="destructive" onClick={deleteFeature}>Delete</Button>
+                            <Button variant="destructive" onClick={deleteFeature}>{t("delete")}</Button>
                         )}
-                        <Button onClick={saveFeature}>Save</Button>
+                        <Button onClick={saveFeature}>{t("save")}</Button>
                     </div>
                 </div>
             )}

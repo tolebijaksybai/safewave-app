@@ -1,6 +1,5 @@
-import {Link} from "react-router-dom"
+import {Link, NavLink} from "react-router-dom"
 import {Button} from "@/components/ui/button"
-import {NavLink} from "react-router-dom"
 import {useAuth} from "@/context/AuthContext"
 import {
     DropdownMenu,
@@ -8,32 +7,41 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+} from "@/components/ui/select"
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {Skeleton} from "@/components/ui/skeleton"
+import {useTranslation} from "react-i18next"
+import i18n from "@/i18n"
 
-const navItems = [
-    {to: "/", label: "Home"},
-    {to: "/categories", label: "Categories"},
-    {to: "/maps", label: "Map"},
-    {href: "/#information", label: "Information"},
-    {to: "/help", label: "Contacts"},
-    {to: "/quizzes", label: "Quiz"},
-]
 
 export default function Header() {
+    const {t} = useTranslation()
     const {user, logout, loading} = useAuth()
     const userInitial = user?.email?.[0]?.toUpperCase() ?? "U"
     const avatarSrc = user?.photo_url ? user.photo_url : undefined
 
+    const navItems = [
+        {to: "/", label: t("home")},
+        {to: "/categories", label: t("categories")},
+        {to: "/maps", label: t("map")},
+        {href: "/#information", label: t("information")},
+        {to: "/help", label: t("contacts")},
+        {to: "/quizzes", label: t("quiz")},
+    ]
+
     return (
         <header className="bg-white border-b shadow-sm h-[70px]">
             <div className="container mx-auto px-4 h-full flex items-center justify-between">
-                {/* Логотип */}
                 <Link to="/" className="flex items-center gap-2">
                     <img src="/images/logo.png" alt="SafeWave Logo" className="h-14 w-auto"/>
                 </Link>
 
-                {/* Навигация */}
                 <nav className="hidden md:flex gap-8 text-md text-zinc-950">
                     {navItems.map((item) =>
                         item.href ? (
@@ -62,53 +70,71 @@ export default function Header() {
                     )}
                 </nav>
 
-                {/* Правый блок: Skeleton, Dropdown или Login */}
-                <div className="w-[200px] flex justify-end">
-                    {loading ? (
-                        <Skeleton className="h-9 w-44 rounded-md bg-zinc-300/70"/>
-                    ) : user ? (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <div className="flex items-center gap-2 px-3 py-1 bg-zinc-100 hover:bg-zinc-200 rounded-lg cursor-pointer">
-                                    <Avatar className="h-8 w-8 bg-zinc-800">
-                                        {avatarSrc ? (
-                                            <AvatarImage src={avatarSrc} alt={user.email}  className="object-cover"/>
-                                        ) : null}
-                                        <AvatarFallback className="text-white bg-zinc-800">
-                                            {userInitial}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <span className="hidden md:block text-zinc-800 font-medium">
+                <div className="flex gap-4 items-center">
+                    {/* Language Switcher */}
+                    <Select
+                        defaultValue={i18n.language}
+                        onValueChange={(value) => {
+                            i18n.changeLanguage(value)
+                            localStorage.setItem("lang", value)
+                        }}
+                    >
+                        <SelectTrigger className="w-[80px]">
+                            <SelectValue />
+                        </SelectTrigger>
+
+                        <SelectContent className="min-w-[80px] w-auto">
+                            <SelectItem value="en">EN</SelectItem>
+                            <SelectItem value="ru">RU</SelectItem>
+                            <SelectItem value="kz">KZ</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    <div className="flex justify-end">
+                        {loading ? (
+                            <Skeleton className="h-9 w-44 rounded-md bg-zinc-300/70"/>
+                        ) : user ? (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <div
+                                        className="flex items-center gap-2 px-3 py-1 bg-zinc-100 hover:bg-zinc-200 rounded-lg cursor-pointer">
+                                        <Avatar className="h-8 w-8 bg-zinc-800">
+                                            {avatarSrc ? (
+                                                <AvatarImage src={avatarSrc} alt={user.email} className="object-cover"/>
+                                            ) : null}
+                                            <AvatarFallback className="text-white bg-zinc-800">
+                                                {userInitial}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <span className="hidden md:block text-zinc-800 font-medium">
                                         {user?.email ?? ""}
-                                  </span>
-                                </div>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                align="end"
-                                className="bg-white text-zinc-900 shadow-md border border-zinc-200 rounded-lg py-2"
-                            >
-                                <DropdownMenuItem asChild className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
-                                    <Link to="/profile">My Profile</Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
-                                    <Link to="/change-password">Change Password</Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
-                                    <Link to="/statistics">Statistics</Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={logout} className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
-                                    Logout
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    ) : (
-                        <Button asChild className="rounded-lg">
-                            <Link to="/login">Log in</Link>
-                        </Button>
-                    )}
+                                    </span>
+                                    </div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end"
+                                                     className="bg-white text-zinc-900 shadow-md border border-zinc-200 rounded-lg py-2">
+                                    <DropdownMenuItem asChild className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
+                                        <Link to="/profile">{t("my_profile")}</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
+                                        <Link to="/change-password">{t("change_password")}</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
+                                        <Link to="/statistics">{t("statistics")}</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={logout}
+                                                      className="cursor-pointer hover:bg-zinc-300 rounded-lg px-4">
+                                        {t("logout")}
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            <Button asChild className="rounded-lg">
+                                <Link to="/login">{t("login")}</Link>
+                            </Button>
+                        )}
+                    </div>
                 </div>
-
-
             </div>
         </header>
     )

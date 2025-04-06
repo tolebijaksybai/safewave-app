@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react"
 import {useParams, useNavigate} from "react-router-dom"
 import axios from "@/lib/axios"
 import {Button} from "@/components/ui/button"
+import {useTranslation} from "react-i18next"
 
 import "ol/ol.css"
 import Map from "ol/Map"
@@ -19,26 +20,24 @@ import Overlay from "ol/Overlay"
 import XYZ from "ol/source/XYZ"
 
 export default function WaterDetailPage() {
+    const {t} = useTranslation()
     const {id} = useParams()
     const navigate = useNavigate()
 
     const mapRef = useRef(null)
     const popupRef = useRef(null)
-    // Сохраняем ссылку на экземпляр карты, чтобы можно было управлять вьюшкой
     const mapInstanceRef = useRef(null)
 
     const [water, setWater] = useState(null)
     const [point, setPoint] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    // Загружаем инфо о воде
     useEffect(() => {
         axios.get(`/api/waters/${id}`)
             .then(res => setWater(res.data))
             .catch(err => console.error("Error fetching water:", err))
     }, [id])
 
-    // Загружаем точку по water_id
     useEffect(() => {
         axios.get(`/api/map-points/by-water/${id}`)
             .then(res => setPoint(res.data))
@@ -46,7 +45,6 @@ export default function WaterDetailPage() {
             .finally(() => setLoading(false))
     }, [id])
 
-    // Инициализируем карту один раз при маунте
     useEffect(() => {
         if (!mapRef.current || !point) return
 
@@ -77,13 +75,13 @@ export default function WaterDetailPage() {
         feature.setStyle(new Style({
             image: new CircleStyle({
                 radius: 7,
-                fill: new Fill({ color: "#f97316" }),
-                stroke: new Stroke({ color: "#000", width: 1 }),
+                fill: new Fill({color: "#f97316"}),
+                stroke: new Stroke({color: "#000", width: 1}),
             }),
         }))
 
         const vectorLayer = new VectorLayer({
-            source: new VectorSource({ features: [feature] }),
+            source: new VectorSource({features: [feature]}),
         })
 
         map.addLayer(vectorLayer)
@@ -104,7 +102,6 @@ export default function WaterDetailPage() {
             })
         })
 
-        // 💥 Самое важное: обновляем размеры когда DOM точно готов
         setTimeout(() => {
             map.updateSize()
         }, 300)
@@ -116,14 +113,12 @@ export default function WaterDetailPage() {
         }
     }, [point])
 
-    // Когда у нас уже есть данные о точке, добавляем фичу на карту
     useEffect(() => {
         if (!point || !point.longitude || !point.latitude) return
         if (!mapInstanceRef.current) return
 
         const map = mapInstanceRef.current
 
-        // Создаём слой под точку
         const feature = new Feature({
             geometry: new Point(fromLonLat([+point.longitude, +point.latitude])),
         })
@@ -137,23 +132,19 @@ export default function WaterDetailPage() {
         }))
 
         const vectorLayer = new VectorLayer({
-            source: new VectorSource({
-                features: [feature],
-            }),
+            source: new VectorSource({features: [feature]}),
         })
 
         map.addLayer(vectorLayer)
 
-        // Плавный переход к координатам воды
         map.getView().animate({
             center: fromLonLat([point.longitude, point.latitude]),
             zoom: 7,
-            duration: 800, // миллисекунды
+            duration: 800,
         })
 
-        // Обработка клика: показываем/скрываем попап
         map.on("click", (e) => {
-            const popup = map.getOverlays().item(0) // у нас один оверлей
+            const popup = map.getOverlays().item(0)
             popup.setPosition(undefined)
             map.forEachFeatureAtPixel(e.pixel, () => {
                 popup.setPosition(e.coordinate)
@@ -162,18 +153,18 @@ export default function WaterDetailPage() {
     }, [point])
 
     if (loading) {
-        return <p className="text-center mt-10">Loading...</p>
+        return <p className="text-center mt-10">{t("water_detail.loading")}</p>
     }
 
     if (!water) {
-        return <p className="text-center text-red-500 mt-10">Water not found</p>
+        return <p className="text-center text-red-500 mt-10">{t("water_detail.not_found")}</p>
     }
 
     return (
         <div className="min-h-[calc(100vh-70px)] bg-white py-10 px-4">
             <div className="container mx-auto max-w-4xl">
                 <Button variant="outline" onClick={() => navigate(-1)} className="mb-6">
-                    ← Back
+                    {t("water_detail.back")}
                 </Button>
 
                 <h2 className="text-2xl font-bold text-center mb-6">{water.name}</h2>
@@ -194,7 +185,10 @@ export default function WaterDetailPage() {
                 <p className="text-sm text-zinc-500 mb-4">{water.address}</p>
 
                 {water.content && (
-                    <div className="prose max-w-none" dangerouslySetInnerHTML={{__html: water.content}} />
+                    <div
+                        className="prose max-w-none"
+                        dangerouslySetInnerHTML={{__html: water.content}}
+                    />
                 )}
 
                 {point && point.latitude && point.longitude && (

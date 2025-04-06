@@ -1,16 +1,17 @@
-// File: src/context/AuthContext.jsx
-import {createContext, useContext, useEffect, useState} from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import axios from "@/lib/axios"
-import {toast} from "sonner"
+import { toast } from "sonner"
+import { useTranslation } from "react-i18next"
 
 const AuthContext = createContext()
 
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
+    const { t } = useTranslation()
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState(null)
     const [token, setToken] = useState(localStorage.getItem("token"))
 
-    // set token in axios header
+    // Устанавливаем токен в axios
     useEffect(() => {
         if (token) {
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
@@ -21,13 +22,12 @@ export function AuthProvider({children}) {
         }
     }, [token])
 
-    // auto fetch user on token
+    // Автоматическая загрузка пользователя при наличии токена
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const {data} = await axios.get("/api/users/profile")
+                const { data } = await axios.get("/api/users/profile")
                 setUser(data.data.user)
-                // eslint-disable-next-line no-unused-vars
             } catch (err) {
                 setUser(null)
             } finally {
@@ -47,10 +47,10 @@ export function AuthProvider({children}) {
     const logout = async () => {
         try {
             await axios.post("/api/logout")
-            toast.success("Вы успешно вышли из системы.")
+            toast.success(t("auth.logout_success"))
             // eslint-disable-next-line no-unused-vars
         } catch (_) {
-            toast.error("Ошибка при выходе из системы.")
+            toast.error(t("auth.logout_error"))
         } finally {
             setToken(null)
             setUser(null)
@@ -58,7 +58,7 @@ export function AuthProvider({children}) {
     }
 
     return (
-        <AuthContext.Provider value={{user, setUser, token, setToken, logout, loading}}>
+        <AuthContext.Provider value={{ user, setUser, token, setToken, logout, loading }}>
             {children}
         </AuthContext.Provider>
     )

@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react"
 import axios from "@/lib/axios"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 export default function CategoriesPage() {
+    const { t } = useTranslation()
     const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
 
     useEffect(() => {
         axios.get("/api/categories")
-            .then(response => {
-                setCategories(response.data)
-            })
-            .catch(() => {
-                setCategories([])
-            })
+            .then(response => setCategories(response.data))
+            .catch(() => setCategories([]))
             .finally(() => setLoading(false))
     }, [])
 
@@ -24,9 +22,9 @@ export default function CategoriesPage() {
 
     return (
         <div className="min-h-[calc(100vh-70px)] bg-gradient-to-br from-blue-100 to-blue-200 py-12 px-4">
-            <h2 className="text-center text-3xl font-bold text-zinc-900 mb-10">CATEGORIES</h2>
+            <h2 className="text-center text-3xl font-bold text-zinc-900 mb-10">{t("categories_title")}</h2>
             {loading ? (
-                <p className="text-center text-zinc-500">Loading...</p>
+                <p className="text-center text-zinc-500">{t("loading")}</p>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                     {categories.map(category => (
