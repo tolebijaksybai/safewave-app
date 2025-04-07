@@ -191,6 +191,19 @@ export default function WaterDetailPage() {
                     />
                 )}
 
+                {water.graph_images_urls?.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-1 gap-4 mb-6 mt-6">
+                        {water.graph_images_urls.map((img, idx) => (
+                            <img
+                                key={idx}
+                                src={img}
+                                alt={`image-${idx}`}
+                                className="rounded-xl object-cover w-full h-auto"
+                            />
+                        ))}
+                    </div>
+                )}
+
                 {point && point.latitude && point.longitude && (
                     <div className="mt-10 relative h-[600px] w-full rounded-xl border">
                         <div
