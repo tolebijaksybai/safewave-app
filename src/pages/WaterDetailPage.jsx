@@ -18,6 +18,7 @@ import {fromLonLat} from "ol/proj"
 import {Style, Fill, Stroke, Circle as CircleStyle} from "ol/style"
 import Overlay from "ol/Overlay"
 import XYZ from "ol/source/XYZ"
+import {ChevronLeft} from "lucide-react"
 
 export default function WaterDetailPage() {
     const {t} = useTranslation()
@@ -164,7 +165,7 @@ export default function WaterDetailPage() {
         <div className="min-h-[calc(100vh-70px)] bg-white py-10 px-4">
             <div className="container mx-auto max-w-4xl">
                 <Button variant="outline" onClick={() => navigate(-1)} className="mb-6">
-                    {t("water_detail.back")}
+                    <ChevronLeft className="w-4 h-4 mr-1"/>  {t("water_detail.back")}
                 </Button>
 
                 <h2 className="text-2xl font-bold text-center mb-6">{water.name}</h2>

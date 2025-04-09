@@ -10,6 +10,8 @@ import { FcGoogle } from "react-icons/fc"
 import { toast } from "sonner"
 import { useAuth } from "@/context/AuthContext"
 import { useTranslation, Trans } from "react-i18next"
+import {API_BASE_URL} from "@/lib/constants.js";
+import {X} from "lucide-react"
 
 export default function RegisterPage() {
     const { t } = useTranslation()
@@ -33,18 +35,40 @@ export default function RegisterPage() {
             const response = await axios.post("/api/register", form)
             const token = response.data.token
             setToken(token)
-            toast.success(t("register.success"))
+            toast.success(t("register.success"), {
+                action: {
+                    label: <X className="w-4 h-4 cursor-pointer"/>,
+                    onClick: () => {
+                    },
+                },
+            })
             setForm({ email: "", password: "", password_confirmation: "" })
             navigate("/")
         } catch (error) {
             if (error.response?.data?.message) {
-                toast.error(error.response.data.message)
+                toast.error(error.response.data.message, {
+                    action: {
+                    label: <X className="w-4 h-4 cursor-pointer"/>,
+                    onClick: () => {
+                    },
+                },
+                })
             } else {
-                toast.error(t("register.error"))
+                toast.error(t("register.error"), {
+                    action: {
+                    label: <X className="w-4 h-4 cursor-pointer"/>,
+                    onClick: () => {
+                    },
+                },
+                })
             }
         } finally {
             setLoading(false)
         }
+    }
+
+    const handleGoogleLogin = () => {
+        window.location.href = `${API_BASE_URL}/api/auth/google`
     }
 
     return (
@@ -65,7 +89,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Right: registration form full width */}
-            <div className="flex items-center justify-center p-6 bg-white relative">
+            <div className="flex items-center justify-center p-6 bg-white relative bg-[url('/images/bg-register.png')] bg-cover bg-center">
                 <div className="w-full max-w-md space-y-6">
                     <h2 className="text-2xl font-semibold text-center">
                         {t("register.title")}
@@ -119,11 +143,9 @@ export default function RegisterPage() {
                         </Button>
                     </form>
 
-                    <Button
-                        variant="outline"
-                        className="w-full flex items-center justify-center gap-2 rounded-lg"
-                    >
-                        <FcGoogle className="text-xl" /> {t("register.google")}
+                    <Button variant="outline" onClick={handleGoogleLogin} className="w-full flex items-center gap-2">
+                        <FcGoogle className="text-xl" />
+                        {t("auth_login.google")}
                     </Button>
 
                     <p className="text-sm text-center text-gray-600">

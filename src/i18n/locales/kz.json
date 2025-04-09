@@ -105,7 +105,7 @@
     },
 
     "waters_by_category": {
-        "back": "← Артқа",
+        "back": "Артқа",
         "loading_category": "Жүктелуде...",
         "loading_waters": "Су айдындары жүктелуде...",
         "details": "Толығырақ"
@@ -114,7 +114,7 @@
     "water_detail": {
         "loading": "Жүктелуде...",
         "not_found": "Су айдыны табылмады",
-        "back": "← Артқа"
+        "back": "Артқа"
     },
 
     "auth_login": {

@@ -1,3 +1,4 @@
+import {useState} from "react"
 import {Link, NavLink} from "react-router-dom"
 import {Button} from "@/components/ui/button"
 import {useAuth} from "@/context/AuthContext"
@@ -18,13 +19,14 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {Skeleton} from "@/components/ui/skeleton"
 import {useTranslation} from "react-i18next"
 import i18n from "@/i18n"
-
+import {X} from "lucide-react"
 
 export default function Header() {
     const {t} = useTranslation()
     const {user, logout, loading} = useAuth()
     const userInitial = user?.email?.[0]?.toUpperCase() ?? "U"
     const avatarSrc = user?.photo_url ? user.photo_url : undefined
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     const navItems = [
         {to: "/", label: t("home")},
@@ -36,12 +38,21 @@ export default function Header() {
     ]
 
     return (
-        <header className="bg-white border-b shadow-sm h-[70px]">
+        <header className="bg-white border-b shadow-sm h-[70px] relative z-50">
             <div className="container mx-auto px-4 h-full flex items-center justify-between">
+                {/* Mobile burger */}
+                <button
+                    className="md:hidden text-2xl text-zinc-900 mr-2"
+                    onClick={() => setMobileMenuOpen(true)}
+                >
+                    ☰
+                </button>
+
                 <Link to="/" className="flex items-center gap-2">
                     <img src="/images/logo.png" alt="SafeWave Logo" className="h-14 w-auto"/>
                 </Link>
 
+                {/* Desktop nav */}
                 <nav className="hidden md:flex gap-8 text-md text-zinc-950">
                     {navItems.map((item) =>
                         item.href ? (
@@ -71,24 +82,26 @@ export default function Header() {
                 </nav>
 
                 <div className="flex gap-4 items-center">
-                    {/* Language Switcher */}
-                    <Select
-                        defaultValue={i18n.language}
-                        onValueChange={(value) => {
-                            i18n.changeLanguage(value)
-                            localStorage.setItem("lang", value)
-                        }}
-                    >
-                        <SelectTrigger className="w-[80px]">
-                            <SelectValue />
-                        </SelectTrigger>
+                    {/* Language Switcher - hidden on mobile */}
+                    <div className="hidden md:block">
+                        <Select
+                            defaultValue={i18n.language}
+                            onValueChange={(value) => {
+                                i18n.changeLanguage(value)
+                                localStorage.setItem("lang", value)
+                            }}
+                        >
+                            <SelectTrigger className="w-[80px]">
+                                <SelectValue/>
+                            </SelectTrigger>
 
-                        <SelectContent className="min-w-[80px] w-auto">
-                            <SelectItem value="en">EN</SelectItem>
-                            <SelectItem value="ru">RU</SelectItem>
-                            <SelectItem value="kz">KZ</SelectItem>
-                        </SelectContent>
-                    </Select>
+                            <SelectContent className="min-w-[80px] w-auto">
+                                <SelectItem value="en">EN</SelectItem>
+                                <SelectItem value="ru">RU</SelectItem>
+                                <SelectItem value="kz">KZ</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
 
                     <div className="flex justify-end">
                         {loading ? (
@@ -107,8 +120,8 @@ export default function Header() {
                                             </AvatarFallback>
                                         </Avatar>
                                         <span className="hidden md:block text-zinc-800 font-medium">
-                                        {user?.email ?? ""}
-                                    </span>
+                                            {user?.email ?? ""}
+                                        </span>
                                     </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end"
@@ -136,6 +149,75 @@ export default function Header() {
                     </div>
                 </div>
             </div>
+
+            {/* Mobile menu content */}
+            <>
+                {/* Overlay */}
+                <div
+                    className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
+                        mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                />
+
+                {/* Slide menu */}
+                <div
+                    className={`fixed top-0 left-0 h-full bg-white shadow-lg p-5 flex flex-col gap-4 z-50 w-3/4 max-w-xs transition-transform duration-300 ease-in-out ${
+                        mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+                    }`}
+                >
+                    <div className="flex justify-between items-center mb-4">
+                        <span className="text-lg font-semibold">Safe Wave</span>
+                        <button onClick={() => setMobileMenuOpen(false)}>
+                            <X className="h-6 w-6 text-zinc-900" />
+                        </button>
+                    </div>
+
+                    {navItems.map((item) =>
+                        item.href ? (
+                            <a
+                                key={item.href}
+                                href={item.href}
+                                className="text-zinc-800 hover:underline"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                {item.label}
+                            </a>
+                        ) : (
+                            <NavLink
+                                key={item.to}
+                                to={item.to}
+                                className="text-zinc-800 hover:underline"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                {item.label}
+                            </NavLink>
+                        )
+                    )}
+
+                    <div className="mt-4">
+                        <label className="text-sm text-zinc-600 block mb-1">{t("language")}</label>
+                        <Select
+                            defaultValue={i18n.language}
+                            onValueChange={(value) => {
+                                i18n.changeLanguage(value)
+                                localStorage.setItem("lang", value)
+                            }}
+                        >
+                            <SelectTrigger className="w-full h-10 border border-zinc-300 rounded-md">
+                                <SelectValue />
+                            </SelectTrigger>
+
+                            <SelectContent className="w-full">
+                                <SelectItem value="en">EN</SelectItem>
+                                <SelectItem value="ru">RU</SelectItem>
+                                <SelectItem value="kz">KZ</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+            </>
+
         </header>
     )
 }

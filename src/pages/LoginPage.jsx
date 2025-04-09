@@ -1,24 +1,25 @@
-import { useState } from "react"
+import {useState} from "react"
 import axios from "@/lib/axios"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Link, useNavigate } from "react-router-dom"
-import { toast } from "sonner"
-import { useAuth } from "@/context/AuthContext"
-import { FcGoogle } from "react-icons/fc"
-import { API_BASE_URL } from "@/lib/constants"
-import { useTranslation } from "react-i18next"
+import {Input} from "@/components/ui/input"
+import {Button} from "@/components/ui/button"
+import {Label} from "@/components/ui/label"
+import {Link, useNavigate} from "react-router-dom"
+import {toast} from "sonner"
+import {useAuth} from "@/context/AuthContext"
+import {FcGoogle} from "react-icons/fc"
+import {API_BASE_URL} from "@/lib/constants"
+import {useTranslation} from "react-i18next"
+import {X} from "lucide-react"
 
 export default function LoginPage() {
-    const { t } = useTranslation()
-    const { setToken } = useAuth()
-    const [form, setForm] = useState({ email: "", password: "" })
+    const {t} = useTranslation()
+    const {setToken} = useAuth()
+    const [form, setForm] = useState({email: "", password: ""})
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.id]: e.target.value })
+        setForm({...form, [e.target.id]: e.target.value})
     }
 
     const handleSubmit = async (e) => {
@@ -28,14 +29,32 @@ export default function LoginPage() {
             const response = await axios.post("/api/login", form)
             const token = response.data.token
             setToken(token)
-            toast.success(t("auth_login.success"))
-            setForm({ email: "", password: "" })
+            toast.success(t("auth_login.success"), {
+                action: {
+                    label: <X className="w-4 h-4 cursor-pointer"/>,
+                    onClick: () => {
+                    },
+                },
+            })
+            setForm({email: "", password: ""})
             navigate("/")
         } catch (error) {
             if (error.response?.data?.message) {
-                toast.error(error.response.data.message)
+                toast.error(error.response.data.message, {
+                    action: {
+                        label: <X className="w-4 h-4 cursor-pointer"/>,
+                        onClick: () => {
+                        },
+                    },
+                })
             } else {
-                toast.error(t("auth_login.failed"))
+                toast.error(t("auth_login.failed"), {
+                    action: {
+                        label: <X className="w-4 h-4 cursor-pointer"/>,
+                        onClick: () => {
+                        },
+                    },
+                })
             }
         } finally {
             setLoading(false)
@@ -49,7 +68,7 @@ export default function LoginPage() {
     return (
         <div className="min-h-[calc(100vh-70px)] grid grid-cols-1 md:grid-cols-2">
             {/* Form */}
-            <div className="flex items-center justify-center p-6 bg-white">
+            <div className="flex items-center justify-center p-6 bg-[url('/images/bg-login.png')] bg-cover bg-center">
                 <div className="w-full max-w-md space-y-6">
                     <h2 className="text-2xl font-semibold text-center">
                         {t("auth_login.title")}
@@ -80,7 +99,7 @@ export default function LoginPage() {
                     </form>
 
                     <Button variant="outline" onClick={handleGoogleLogin} className="w-full flex items-center gap-2">
-                        <FcGoogle className="text-xl" />
+                        <FcGoogle className="text-xl"/>
                         {t("auth_login.google")}
                     </Button>
 
@@ -96,14 +115,14 @@ export default function LoginPage() {
             {/* Background image and motto */}
             <div
                 className="hidden md:flex flex-col items-center justify-center bg-cover bg-center text-white p-8 text-center"
-                style={{ backgroundImage: "url('/images/bg-auth.png')" }}
+                style={{backgroundImage: "url('/images/bg-auth.png')"}}
             >
                 <div className="max-w-sm">
                     <p className="text-2xl sm:text-3xl font-bold leading-snug">
                         {t("auth_login.motto_part1")}{" "}
-                        <span className="text-blue-300">{t("auth_login.motto_emphasis1")}</span>,{" "}
+                        <span className="text-blue-500">{t("auth_login.motto_emphasis1")}</span>,{" "}
                         {t("auth_login.motto_part2")}{" "}
-                        <span className="text-blue-300">{t("auth_login.motto_emphasis2")}</span>.
+                        <span className="text-blue-500">{t("auth_login.motto_emphasis2")}</span>.
                     </p>
                 </div>
             </div>

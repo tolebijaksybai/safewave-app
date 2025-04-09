@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import axios from "@/lib/axios"
 import { Button } from "@/components/ui/button"
 import { useTranslation } from "react-i18next"
+import {ChevronLeft} from "lucide-react"
 
 export default function WatersByCategoryPage() {
     const { t } = useTranslation()
@@ -42,7 +43,7 @@ export default function WatersByCategoryPage() {
                         onClick={() => navigate(-1)}
                         className="flex items-center gap-2 text-zinc-700 border-zinc-300 hover:bg-zinc-100"
                     >
-                        {t("waters_by_category.back")}
+                        <ChevronLeft className="w-4 h-4 mr-1"/> {t("waters_by_category.back")}
                     </Button>
 
                     <h2 className="text-center text-3xl font-bold text-zinc-900 mb-10 uppercase">

@@ -102,7 +102,7 @@
     },
 
     "waters_by_category": {
-        "back": "← Back",
+        "back": "Back",
         "loading_category": "Loading...",
         "loading_waters": "Loading waters...",
         "details": "Details",
@@ -112,7 +112,7 @@
     "water_detail": {
         "loading": "Loading...",
         "not_found": "Water not found",
-        "back": "← Back"
+        "back": "Back"
     },
 
     "auth_login": {

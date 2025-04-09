@@ -1,8 +1,10 @@
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import {fileURLToPath} from 'node:url'
-import {dirname} from 'node:path'
-import {resolve} from 'node:path'
+import {dirname, resolve} from 'node:path'
+import { config } from 'dotenv'
+
+config()
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
